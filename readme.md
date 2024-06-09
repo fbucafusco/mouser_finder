@@ -5,15 +5,13 @@ Mouser (as many other distributors) only allow to get som data, so this scripts 
 
 This is just a proof of concept and still needs a lot of work. 
 
-# Using Digikey API
+## Usage
 
-- login/create an account
-- goto develop.digikey.com
-- accept terms
-- Goto User Dropdown -> create sandbox app
-- Select sandbox-ProductInformation V4 
+```
+python poc.py
+```
 
-# Using Mouser API
+## Using Mouser API
 - login/create an account
 - create an mouser API application. Fill the form, and get teh API key.
   - Account details -> API ...
@@ -24,5 +22,5 @@ This is just a proof of concept and still needs a lot of work.
  
  Basically you have a given number or request per minute and a total per day.
 
-# References
-- (Seerch API)[https://api.mouser.com/api/docs/ui/index]
+## References
+- [Seerch API](https://api.mouser.com/api/docs/ui/index)
