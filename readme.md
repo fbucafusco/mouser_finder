@@ -23,4 +23,4 @@ python poc.py
  Basically you have a given number or request per minute and a total per day.
 
 ## References
-- [Seerch API](https://api.mouser.com/api/docs/ui/index)
+- [Search API](https://api.mouser.com/api/docs/ui/index)

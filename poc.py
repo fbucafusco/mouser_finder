@@ -74,6 +74,21 @@ def validate_component( params : dict) -> bool:
     return True
 
 def get_keywords_from_params(params : dict) -> str:
+    """
+    Generates a list of keyword strings based on the provided component parameters.
+
+    This function takes a dictionary of component parameters and generates a list of keyword strings. 
+    Each keyword string is a combination of the value, tolerance, power (for resistors), or voltage (for capacitors) 
+    of the component, along with the component type and package if they are provided. 
+    The function generates all possible combinations of these parameters.
+
+    Args:
+        params (dict): A dictionary containing parameters for the type of component. 
+            It includes type, package, tolerance, power, voltage, value, and flags for better power or voltage rating.
+
+    Returns:
+        list: A list of keyword strings for searching component descriptions.
+    """
     value_variants = params['value_number_variants'] 
     tolerance_variants = params['tolerance_number_variants']
 
@@ -121,11 +136,21 @@ def get_keywords_from_params(params : dict) -> str:
     return keywords
 
 def calculate_search_patterns(component_params : dict) -> bool:
-    ''' 
-    calculates the search patterns for later description filtering for echa component. 
-    if the component characteristicas cannot be calculated, returns False
-    validates the input params
-    '''
+    """
+    Calculates search patterns for filtering component descriptions.
+
+    This function takes a dictionary of component parameters and calculates search patterns for each parameter. 
+    These patterns are used for filtering component descriptions later. If the function cannot calculate 
+    the search patterns due to invalid component parameters, it returns False.
+
+    Args:
+        component_params (dict): A dictionary containing parameters for the type of component. 
+            It includes type, package, tolerance, power, voltage, value, and tempco.
+
+    Returns:
+        bool: True if the search patterns were successfully calculated, False otherwise.
+
+    """
 
     if voltage_rating_field_name in component_params:
         if component_params['type']=='capacitor':  #only for caps  
@@ -226,16 +251,25 @@ def calculate_search_patterns(component_params : dict) -> bool:
     # "package" does not have special preprocessing    
     # "tempco" does not have special preprocessing
         
-        
     return True
 
 def clenup_description(component_params : dict, description : str) -> tuple :
-    '''
-    this function cleans up the descrption. For example, if params has a power rating, then the unit is W. The description can have 
-    different ways of writing that in the description for xample "1 W" or "1W" or "1 Watt" or "1 watt" or "1w" or "1 watt" or "1watt"
-    so this function will clean up that part to be standarized like "1W".
-    The same with the rest of the possiolbe params
-    '''
+    """
+    Cleans up and standardizes the description of an electronic component.
+
+    This function takes a description of an electronic component and a dictionary of component parameters. 
+    It standardizes the description by replacing various representations of the parameters (like power, 
+    voltage, tolerance, type, package, and temperature coefficient) with a standard format. For example, 
+    it replaces "1 W", "1W", "1 Watt", "1 watt", "1w", "1 watt", or "1watt" with "1W".
+
+    Args:
+        component_params (dict): A dictionary containing parameters for the type of component. 
+            It includes type, package, tolerance, power, voltage, and value.
+        description (str): The description of the component to be cleaned up.
+
+    Returns:
+        tuple: A tuple containing the cleaned up description and a boolean indicating whether the description is valid.
+    """
     valid = False   #if the description is valid
     description = description.lower()
     #remove , from description
@@ -410,15 +444,25 @@ def clenup_description(component_params : dict, description : str) -> tuple :
     return description , True
 
 def get_filtered_components(api_key , component_params : dict , total_occurrences , fields):
-    '''
-    component_params is a dict, with
-    "type" : "resistor", "capacitor", "inductor", "connector", "switch", "diode", "transistor", "ic", "led", "crystal", "oscillator", "fuse", "relay", "transformer", "sensor"
-    "package" : "0603", "0805", "1206", "SOT-23", "SOT-223", "SOT-89",
-    "tolerance" : "1%", "5%", "10%", "20%", "30%",
-    "power" : "1/16W", "1/8W", "1/4W", "1/2W", "1W", "2W", "3W", "5W", "10W", "20W", "50W", "100W", "200W", "500W", "1000W", "2000W", "5000W", "10000W" for resistors
-    "voltage" : "5V", "12V", "24V", "48V", "120V", "240V" for capacitors
-    "value" : "10K", "100K", "1M", "10M", "100M", "1G" for resistors and capacitors
-    '''
+    """
+    Fetches and filters electronic components based on given parameters.
+
+    This function makes API calls to fetch electronic components data. It filters the data based on the 
+    component parameters provided and returns the filtered data.
+
+    Args:
+        api_key (str): The API key to access the electronic components data.
+        component_params (dict): A dictionary containing parameters for the type of component. 
+            It includes type, package, tolerance, power, voltage, and value.
+        total_occurrences (int): The total number of occurrences to fetch.
+        fields (list): The fields to include in the returned data.
+
+    Returns:
+        list: A list of dictionaries, where each dictionary contains data for a component.
+
+    Raises:
+        HTTPError: If an error occurs during the API call.
+    """
     global api_calls
         
     all_records = []
